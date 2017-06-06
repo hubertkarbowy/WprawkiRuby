@@ -88,5 +88,30 @@ first_name = lambda { |first, last| first + " " + last }
 p first_name.call("Hub", "Kar")
 p first_name["Z", "XX"]
 
-first_name = -> (first, last) { first + " " + last }
+first_name = -> (first, last) { first + " " + last } # Czemu Eclipse daje tutaj blad skoro interpreter nie wyrzuca bledu?
 p first_name["Powinno", "Dzialac"]
+  
+full_name = lambda { |first, last| first + " " + last }
+p full_name.call("Imie", "Nazwisko")
+# p full_name.call("Imie", "Nazwisko", "Trzeci") # nie zadziala
+
+full_name = Proc.new{ |first, last| first + " " + last }
+p full_name.call("Imie", "Nazwisko", "Trzeci") # ignoruje reszte argumentow
+
+def my_method
+  p "Przed definicja 1"
+  x = lambda { return }
+  x.call
+  p "Text from within the method"  
+end
+
+my_method
+
+def my_method
+  p "Przed definicja 2"
+  x = Proc.new { return }
+  x.call # jesli proc zwraca w metodzie nil, to reszta metody sie nie wykonuje - dziwaczne, ale tak ktos wymyslil...
+  p "To sie juz nie wyswietli"  
+end
+
+my_method
