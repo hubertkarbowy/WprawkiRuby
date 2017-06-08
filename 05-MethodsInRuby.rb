@@ -68,7 +68,7 @@ i.conv_to_pdf
 # ----------------- PROCS = processes that can be stored in variables
 
 
-full_name = Proc.new { |first, last| first + " " + last} # similar to a lambda (Consumer - no return value)
+full_name = Proc.new { |first, last| first + " " + last} # similar to a lambda
 p full_name["Hubert", "Karbowy"]
 p full_name.call("Hubert", "Karbowy")
 
