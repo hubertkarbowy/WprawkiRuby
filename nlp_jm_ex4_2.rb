@@ -39,7 +39,8 @@ AngelList said Mr. Nivi has no role at the company and is no longer a board memb
 Mr. Jenkin would not say whether AngelList had a nondisparagement agreement with Ms. Ruvolo or whether Mr. Nivi had harassed her. He disputed some of the details of the poolside incident described to The Times, but would not provide clarification.
 Ms. Ruvolo, who was a freelance writer for AngelList and whose contract was not renewed this year, said she could not comment on the event that led to her agreement or on the terms of the deal.
 “Companies wave the agreements around and use them to force a settlement and make the problem go away,” said Karen Kessler, chief executive of the public relations firm Evergreen Partners. “After that, nobody is the wiser for it.”"
-corpus = "XXX en sag sag en sag en sag sag comma en annan sagade sagen sagen sag dot yyy"
+#corpus = "XXX en sag sag en sag en sag sag comma en annan sagade sagen sagen sag dot yyy"
+corpus = "carp carp carp carp carp carp carp carp carp carp perch perch perch whitefish whitefish trout salmon eel"
 corpus = corpus.gsub(/[^a-z|A-Z|\s]/, "").gsub(/\n/, " ").downcase
 puts corpus
 # File.write("/home/hubert/mojkorpus.txt", corpus)
@@ -51,13 +52,24 @@ for i in 1..2
   ngram_counts[i] = corpus.split(" ").each_cons(i).to_a.reduce(Hash.new(0)) {|acc, word| acc[word] += 1; acc }.map{|k,v| [k.join(" "), v]}.to_h
   puts "For #{i}-grams number of word types = #{ngram_counts[i].size}"
 end
+pp ngram_counts
 
 good_turing_bins = []
+good_turing_bins[0] = [corpus.split.count] # N = 18
 for i in 1..2
-  good_turing_bins[i] = ngram_counts[i].values.reduce(0) {|acc, cnt| cnt==i ? 1+acc: acc}
+  good_turing_bins[i] = []
+  (1..10).each {|j| good_turing_bins[i][j] = ngram_counts[i].values.reduce(0) {|acc, cnt| cnt==j ? 1+acc: acc} }
 end
 
-puts good_turing_bins
+pp good_turing_bins
+
+next_word = "perch"
+puts next_word_count = ngram_counts[1].fetch(next_word, 0)
+next_word_revised_count = ((next_word_count+1)*(good_turing_bins[1][next_word_count+1].to_f))/good_turing_bins[1][next_word_count]
+puts "Next word: #{next_word}, count: #{next_word_count}, revised count: #{next_word_revised_count}"
+
+exit 0
+
 #unigram_counts = corpus.split(" ").each_cons(1).to_a.reduce(Hash.new(0)) {|acc, word| acc[word] += 1; acc }.map{|k,v| [k.join(" "), v]}.to_h
 #pp ['this', 'is', 'a', 'very', 'simple', 'corpus'].each_cons(2).to_a 
 #bigram_counts = corpus.split(" ").each_cons(2).to_a.reduce(Hash.new(0)) {|acc, tuple| acc[tuple] += 1; acc}.map{|k,v| [k.join(" "), v]}.to_h
